@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Funcionarios {
+  matricula String @id
+  nome String
+  
+  treinamentos Funcionarios_Treinamentos[]
+}
+
+model Treinamentos {
+  id String @default(uuid()) @id
+  nome String @unique
+  validade Int @default(2)
+
+  funcionarios Funcionarios_Treinamentos[]
+}
+
+model Funcionarios_Treinamentos {
+  date_of_completion DateTime @default(now())
+  
+  funcionario Funcionarios @relation(fields: [funcionarioId], references: [matricula], onDelete: Cascade, onUpdate: Cascade)
+  funcionarioId String
+  treinamento Treinamentos @relation(fields: [treinamentoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  treinamentoId String
+
+  @@id([funcionarioId, treinamentoId])
+}
