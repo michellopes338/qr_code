@@ -6,7 +6,6 @@ import {
 import { PrismaService } from 'src/prisma.service';
 import { Treinamento } from './entities/treinamento.entity';
 import { UpdateTreinamento } from './dto/update-treinamento.dto';
-import * as moment from 'moment';
 
 @Injectable()
 export class TreinamentosService {
