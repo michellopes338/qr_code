@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS "Treinamentos" (
 	PRIMARY KEY("id")
 );
 CREATE TABLE IF NOT EXISTS "Funcionarios_Treinamentos" (
-	"date_of_completion"	DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"date_of_completion"	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	"funcionarioId"	TEXT NOT NULL,
 	"treinamentoId"	TEXT NOT NULL,
 	CONSTRAINT "Funcionarios_Treinamentos_funcionarioId_fkey" FOREIGN KEY("funcionarioId") REFERENCES "Funcionarios"("matricula") ON DELETE CASCADE ON UPDATE CASCADE,
