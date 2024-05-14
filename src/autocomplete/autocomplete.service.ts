@@ -7,7 +7,7 @@ export class AutocompleteService {
 
   async autocomplete(search: string) {
     const values = await this.prisma.funcionarios.findMany({
-      where: { nome: { startsWith: search } },
+      where: { nome: { startsWith: search, mode: 'insensitive' } },
       select: { nome: true, matricula: true },
     });
 

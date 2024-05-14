@@ -1,4 +1,15 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateTreinamentoDto } from './create-treinamento.dto';
+import { IsDateString, IsNotEmpty, IsUUID } from 'class-validator';
 
-export class UpdateTreinamentoDto extends PartialType(CreateTreinamentoDto) {}
+export class UpdateTreinamento {
+  @IsNotEmpty()
+  @IsUUID()
+  id: string;
+
+  @IsNotEmpty()
+  @IsDateString()
+  realization_date: Date;
+
+  constructor(partial: Partial<UpdateTreinamento>) {
+    Object.assign(this, partial);
+  }
+}

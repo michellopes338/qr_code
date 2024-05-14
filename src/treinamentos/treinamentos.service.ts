@@ -4,17 +4,28 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
+import { Treinamento } from './entities/treinamento.entity';
+import { UpdateTreinamento } from './dto/update-treinamento.dto';
+import * as moment from 'moment';
 
 @Injectable()
 export class TreinamentosService {
   constructor(private readonly prisma: PrismaService) {}
-  // create(createTreinamentoDto: CreateTreinamentoDto) {
-  //   return 'This action adds a new treinamento';
-  // }
+  async create(createTreinamentoDto: Treinamento) {
+    return await this.prisma.treinamentos.create({
+      data: createTreinamentoDto,
+    });
+  }
 
-  // findAll() {
-  //   return `This action returns all treinamentos`;
-  // }
+  async findTreinamentoById(id: string) {
+    const treinamento = await this.prisma.treinamentos.findUnique({
+      where: { id },
+    });
+
+    if (!treinamento) throw new BadRequestException();
+
+    return treinamento;
+  }
 
   async findByMatricula(matricula: string) {
     const treinamentos = await this.prisma.funcionarios.findFirst({
@@ -57,6 +68,25 @@ export class TreinamentosService {
       matricula: treinamentos.matricula,
       treinamentos: [...treinamentos_filtered],
     };
+  }
+
+  async listTreinamentos(
+    limit: number,
+    offset: number,
+    search?: string,
+  ): Promise<Array<Treinamento>> {
+    if (search) {
+      return await this.prisma.treinamentos.findMany({
+        take: offset,
+        skip: limit,
+        where: { nome: { contains: search, mode: 'insensitive' } },
+      });
+    }
+
+    return await this.prisma.treinamentos.findMany({
+      take: offset,
+      skip: limit,
+    });
   }
 
   async findByName(name: string) {
@@ -123,11 +153,54 @@ export class TreinamentosService {
     throw new BadRequestException('Nome ou Matricula invalidas');
   }
 
-  // update(id: number, updateTreinamentoDto: UpdateTreinamentoDto) {
-  //   return `This action updates a #${id} treinamento`;
-  // }
+  async updateTreinamentoDe(
+    matricula: string,
+    updateTreinamento: Array<UpdateTreinamento>,
+  ) {
+    const user_exist = await this.prisma.funcionarios.findUnique({
+      where: { matricula },
+    });
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} treinamento`;
-  // }
+    if (!user_exist) {
+      throw new BadRequestException();
+    }
+
+    updateTreinamento.forEach(async (update_treinamento) => {
+      await this.prisma.funcionarios_Treinamentos.upsert({
+        where: {
+          funcionarioId_treinamentoId: {
+            funcionarioId: matricula,
+            treinamentoId: update_treinamento.id,
+          },
+        },
+        update: {
+          date_of_completion: new Date(update_treinamento.realization_date),
+        },
+        create: {
+          funcionarioId: matricula,
+          treinamentoId: update_treinamento.id,
+          date_of_completion: new Date(update_treinamento.realization_date),
+        },
+      });
+    });
+
+    return await this.findOne(matricula);
+  }
+
+  async update(id: string, updateTreinamentoDto: Partial<Treinamento>) {
+    const exist = await this.findTreinamentoById(id);
+
+    if (!exist) {
+      throw new BadRequestException();
+    }
+
+    return await this.prisma.treinamentos.update({
+      where: { id },
+      data: updateTreinamentoDto,
+    });
+  }
+
+  async remove(id: string) {
+    return await this.prisma.treinamentos.delete({ where: { id } });
+  }
 }
