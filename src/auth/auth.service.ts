@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -8,7 +8,7 @@ export class AuthService {
   constructor(
     private readonly userService: UsersService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async signIn(username: string, password: string): Promise<any> {
     const user = await this.userService.findOneByName(username);
@@ -38,7 +38,7 @@ export class AuthService {
       return { access_token, refresh_token };
     }
 
-    return null;
+    throw new UnauthorizedException('Falha de login');
   }
 
   async gen_access_token(username: string, sub: string, role) {

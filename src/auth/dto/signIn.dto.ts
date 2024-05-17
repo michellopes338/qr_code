@@ -4,6 +4,6 @@ export class SignIn {
   @IsAlpha()
   username: string;
 
-  @IsStrongPassword()
+  @IsStrongPassword({ minLength: 8 }, { message: 'Senha muito fraca' })
   password: string;
 }
