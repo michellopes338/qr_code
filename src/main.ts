@@ -1,7 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import helmet from 'helmet';
+import { ConfigModule } from '@nestjs/config';
 
+ConfigModule.forRoot();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
@@ -15,7 +18,13 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors({ origin: '*' });
+  app.use(helmet());
+
+  app.enableCors({
+    origin: ['http://localhost:3000', 'https://qr-code-front-pi.vercel.app/'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    credentials: true,
+  });
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
