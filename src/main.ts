@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { UnauthorizedException, ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
 import { ConfigModule } from '@nestjs/config';
 
@@ -20,13 +20,23 @@ async function bootstrap() {
 
   app.use(helmet());
 
+  const whitelist = [
+    'http://localhost:5173',
+    'https://qr-code-front-pi.vercel.app/',
+    'https://qr-code-front-pqaqgkkvl-michellopes338s-projects.vercel.app',
+  ];
+
   app.enableCors({
-    origin: [
-      'http://localhost:3000',
-      'https://qr-code-front-pi.vercel.app/',
-      'qr-code-front-pqaqgkkvl-michellopes338s-projects.vercel.app',
-    ],
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    origin: (origin, callback) => {
+      if (whitelist.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new UnauthorizedException('Not Allowed By CORS'));
+      }
+    },
+    allowedHeaders:
+      'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe',
+    methods: 'GET, POST, PATCH, ELETE',
     credentials: true,
   });
   await app.listen(process.env.PORT || 3000);
