@@ -22,7 +22,7 @@ async function bootstrap() {
 
   const whitelist = [
     'http://localhost:5173',
-    'https://qr-code-front-pi.vercel.app/',
+    'https://qr-code-front-pi.vercel.app',
     'https://qr-code-front-pqaqgkkvl-michellopes338s-projects.vercel.app',
   ];
 
