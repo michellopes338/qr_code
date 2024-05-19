@@ -21,7 +21,11 @@ async function bootstrap() {
   app.use(helmet());
 
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://qr-code-front-pi.vercel.app/'],
+    origin: [
+      'http://localhost:3000',
+      'https://qr-code-front-pi.vercel.app/',
+      'qr-code-front-pqaqgkkvl-michellopes338s-projects.vercel.app',
+    ],
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials: true,
   });
