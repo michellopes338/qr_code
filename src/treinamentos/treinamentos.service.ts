@@ -70,8 +70,8 @@ export class TreinamentosService {
   }
 
   async listTreinamentos(
-    limit: number,
-    offset: number,
+    limit: number | string,
+    offset: number | string,
     search?: string,
   ): Promise<Array<Treinamento>> {
     if (search) {
