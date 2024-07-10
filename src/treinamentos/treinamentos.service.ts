@@ -83,7 +83,7 @@ export class TreinamentosService {
     }
 
     return await this.prisma.treinamentos.findMany({
-      take: paseInt(offset),
+      take: parseInt(offset),
       skip: parseInt(limit),
     });
   }
