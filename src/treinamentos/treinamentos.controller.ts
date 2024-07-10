@@ -36,8 +36,8 @@ export class TreinamentosController {
   @Get('')
   @Roles(Role.ADMIN, Role.SUPERUSER)
   async listTreinamentos(
-    @Query('limit') limit = 0,
-    @Query('offset') offset = 20,
+    @Query('limit') limit = '0',
+    @Query('offset') offset = '20',
     @Query('search') search?: string,
   ): Promise<Array<Treinamento>> {
     return await this.treinamentosService.listTreinamentos(
