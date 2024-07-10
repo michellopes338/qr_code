@@ -41,8 +41,8 @@ export class TreinamentosController {
     @Query('search') search?: string,
   ): Promise<Array<Treinamento>> {
     return await this.treinamentosService.listTreinamentos(
-      limit,
-      offset,
+      parseInt(limit),
+      parseInt(offset),
       search,
     );
   }
