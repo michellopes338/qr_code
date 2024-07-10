@@ -76,8 +76,8 @@ export class TreinamentosService {
   ): Promise<Array<Treinamento>> {
     if (search) {
       return await this.prisma.treinamentos.findMany({
-        take: offset,
-        skip: limit,
+        take: parseInt(offset),
+        skip: parseInt(limit),
         where: { nome: { contains: search, mode: 'insensitive' } },
       });
     }
