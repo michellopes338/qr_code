@@ -9,6 +9,7 @@ import {
   Delete,
   Query,
   ParseArrayPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { TreinamentosService } from './treinamentos.service';
 import { Public } from 'src/decorators/public.decorators';
@@ -16,8 +17,10 @@ import { Treinamento } from './entities/treinamento.entity';
 import { Roles } from 'src/decorators/roles.decorators';
 import { Role } from '@prisma/client';
 import { UpdateTreinamento } from './dto/update-treinamento.dto';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('treinamentos')
+@UseInterceptors(CacheInterceptor)
 export class TreinamentosController {
   constructor(private readonly treinamentosService: TreinamentosService) {}
 
