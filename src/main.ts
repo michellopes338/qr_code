@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { UnauthorizedException, ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
 import { ConfigModule } from '@nestjs/config';
+import * as compression from 'compression';
 
 ConfigModule.forRoot();
 async function bootstrap() {
@@ -19,8 +20,17 @@ async function bootstrap() {
   );
 
   app.use(helmet());
+  app.use(
+    compression({
+      filter: () => {
+        return true;
+      },
+      threshold: 0,
+    }),
+  );
 
   const whitelist = [
+    'http://localhost:3000',
     'http://localhost:5173',
     'https://qr-code-front-pi.vercel.app',
     'https://qr-code-front-pqaqgkkvl-michellopes338s-projects.vercel.app',
