@@ -29,7 +29,7 @@ async function bootstrap() {
     }),
   );
 
-  const whitelist = [
+  const allowlist = [
     'http://localhost:3000',
     'http://localhost:5173',
     'https://qr-code-front-pi.vercel.app',
@@ -38,7 +38,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, callback) => {
-      if (whitelist.includes(origin)) {
+      if (allowlist.includes(origin)) {
         callback(null, true);
       } else {
         callback(new UnauthorizedException('Not Allowed By CORS'));
