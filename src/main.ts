@@ -34,6 +34,7 @@ async function bootstrap() {
     'http://localhost:5173',
     'https://qr-code-front-pi.vercel.app',
     'https://qr-code-front-pqaqgkkvl-michellopes338s-projects.vercel.app',
+    'https://5173-michellopes-qrcodefront-qjtjy5qrxql.ws-us116.gitpod.io'
   ];
 
   app.enableCors({
